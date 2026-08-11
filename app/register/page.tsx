@@ -63,7 +63,7 @@ export default function RegisterPage() {
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || !result) return
     try {
-      const canvas = await html2canvas(pdfRef.current, { scale: 2 })
+      const canvas = await html2canvas(pdfRef.current, { scale: 2 } as any)
       const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF('p', 'mm', 'a4')
       const pdfWidth = pdf.internal.pageSize.getWidth()
