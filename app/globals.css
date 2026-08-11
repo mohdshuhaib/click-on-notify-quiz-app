@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-neu-bg text-neu-text;
+  }
+
+  /* This ensures global focus rings match the theme */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-neu-blue ring-offset-2 ring-offset-neu-bg;
+  }
+
+  /* Hides standard scrollbars for a cleaner look, but keeps scrolling functional */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-slate-300 rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-slate-400;
+  }
+}
