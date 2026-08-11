@@ -222,8 +222,8 @@ export default function RegisterPage() {
               <p className="text-xs text-neu-text-light mt-1">Please complete the payment using GPay and enter the Transaction/Payment ID below.</p>
             </div>
             
-            <a href="upi://pay?pa=akbarshuhaib55-2@okaxis&pn=Click%20on%20Notify%20Quiz" target="_blank" className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
-              Open GPay to Pay
+            <a href="upi://pay?pa=akbarshuhaib55-2@okaxis&pn=Click%20on%20Notify%20Quiz&am=20.00&cu=INR" target="_blank" className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
+              Open GPay to Pay ₹20
             </a>
 
             <div className="space-y-2 pt-2">
