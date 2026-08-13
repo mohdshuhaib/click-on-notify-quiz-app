@@ -23,6 +23,9 @@ export default function LoginPage() {
       }
       // If success, next/navigation redirect will trigger and we don't need to unset loading immediately
     } catch (err: any) {
+      if (err.message === 'NEXT_REDIRECT') {
+        throw err;
+      }
       setError(err.message || 'An unexpected error occurred')
       setLoading(false)
     }

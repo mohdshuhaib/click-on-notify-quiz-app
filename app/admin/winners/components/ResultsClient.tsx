@@ -43,18 +43,11 @@ export default function ResultsClient({ quiz, submissions, questions }: Props) {
         "Submitted": new Date(sub.submitted_at).toLocaleString()
       };
 
-      // Exact Custom Data mapping (Using real labels instead of IDs)
+      // Exact Custom Data mapping
       if (sub.respondent_details) {
         Object.entries(sub.respondent_details).forEach(([key, value]) => {
-          // Skip default name or exact duplicate of the main respondent name
           if (key === 'default_name' || value === sub.respondent_name) return;
-
-          // Map ID to the actual custom label creator wrote
-          const fieldDef = quiz.intro_fields?.find((f: any) => f.id === key);
-          const label = fieldDef ? fieldDef.label : key;
-
-          // Show pure data
-          baseData[label] = value;
+          baseData[key] = value;
         });
       }
 
@@ -73,19 +66,19 @@ export default function ResultsClient({ quiz, submissions, questions }: Props) {
 
   return (
     <div>
-      <div className="flex justify-end mb-6">
+      <div className="flex justify-end mb-8">
         <button
           onClick={handleExportToExcel}
           disabled={submissions.length === 0}
-          className="flex items-center gap-2 px-5 py-2.5 bg-slate-900 text-white text-sm font-semibold rounded-lg hover:bg-slate-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
+          className="flex items-center gap-2 px-6 py-4 bg-neu-bg text-neu-blue font-bold rounded-2xl shadow-neu-flat hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all disabled:opacity-50 disabled:shadow-none"
         >
-          <Download className="w-4 h-4" /> Export Leaderboard
+          <Download className="w-5 h-5" /> Export Leaderboard
         </button>
       </div>
 
       <StatCards submissions={rankedSubmissions} />
 
-      <h2 className="text-xl font-bold text-slate-900 mb-4 mt-8">Live Leaderboard</h2>
+      <h2 className="text-2xl font-black text-neu-text mb-6 mt-10">Live Leaderboard</h2>
       {/* Pass the quiz object here so we can read the field labels! */}
       <SubmissionsTable submissions={rankedSubmissions} questions={questions} quiz={quiz} />
 

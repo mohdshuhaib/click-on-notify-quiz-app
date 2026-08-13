@@ -8,7 +8,7 @@ export async function getPublicQuiz(quizId: string) {
   // 1. Fetch the quiz details
   const { data: quiz, error: quizError } = await supabase
     .from('quizzes')
-    .select('id, title, description, time_limit_seconds, require_password, quiz_password, shuffle_questions, is_published, intro_fields, show_results, start_time, end_time')
+    .select('id, title, description, time_limit_seconds, shuffle_questions, is_published, start_time, end_time')
     .eq('id', quizId)
     .single();
 
@@ -47,24 +47,45 @@ export async function getPublicQuiz(quizId: string) {
 
   if (!questions) return { status: "unavailable", error: "No questions found." };
 
-  // Map options to questions
-  const formattedQuestions = questions.map(q => ({
-    ...q,
-    options: q.options || []
-  }));
+  // Map options and parse complex questions
+  const formattedQuestions = questions.map(q => {
+    let parsedText = q.question_text;
+    let statements: string[] | undefined = undefined;
+
+    try {
+      if (parsedText.startsWith('{') && parsedText.includes('"_type"')) {
+        const parsed = JSON.parse(parsedText);
+        if (parsed._type === 'complex') {
+          parsedText = parsed.text;
+          if (parsed.statements && parsed.statements.length > 0) {
+            statements = parsed.statements;
+          }
+        }
+      }
+    } catch (e) {
+      // ignore
+    }
+
+    // Shuffle options to prevent adjacent cheating
+    let shuffledOptions = q.options || [];
+    if (shuffledOptions.length > 0) {
+      shuffledOptions = [...shuffledOptions].sort(() => Math.random() - 0.5);
+    }
+
+    return {
+      ...q,
+      question_text: parsedText,
+      statements,
+      options: shuffledOptions
+    };
+  });
 
   // Shuffle questions if enabled
   if (quiz.shuffle_questions) {
     formattedQuestions.sort(() => Math.random() - 0.5);
   }
 
-  // Remove the actual password from the payload so it isn't exposed in the network tab
-  const secureQuizConfig = {
-    ...quiz,
-    quiz_password: quiz.require_password ? "PROTECTED" : null,
-  };
-
-  return { status: "active", quiz: secureQuizConfig, questions: formattedQuestions };
+  return { status: "active", quiz, questions: formattedQuestions };
 }
 
 export async function submitQuizAndGrade(
@@ -124,30 +145,4 @@ export async function submitQuizAndGrade(
 
   return { success: true, score, totalPoints };
 }
-
-export async function verifyQuizPassword(quizId: string, passwordAttempt: string) {
-  const supabase = await createClient();
-
-  const { data } = await supabase
-    .from('quizzes')
-    .select('quiz_password')
-    .eq('id', quizId)
-    .single();
-
-  if (!data || !data.quiz_password) return false;
-  
-  const savedPassword = data.quiz_password;
-  
-  // If it's a new hashed password, it will be exactly 64 chars long (SHA-256 hex)
-  if (savedPassword.length === 64) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(passwordAttempt);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex === savedPassword;
-  }
-
-  // Fallback to plain text for backward compatibility with older quizzes
-  return savedPassword === passwordAttempt;
-}
+

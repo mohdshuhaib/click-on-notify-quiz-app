@@ -9,14 +9,13 @@ import { submitQuizAndGrade } from "../actions";
 import Link from "next/link";
 
 interface Option { id: string; option_text: string; }
-interface Question { id: string; question_text: string; points: number; options: Option[]; }
+interface Question { id: string; question_text: string; points: number; options: Option[]; statements?: string[]; }
 
 interface Quiz {
   id: string;
   title: string;
   description: string | null;
   time_limit_seconds: number | null;
-  show_results: boolean;
 }
 
 export default function QuizEngine({ quiz, questions, participant }: { quiz: Quiz, questions: Question[], participant: any }) {
@@ -151,7 +150,7 @@ export default function QuizEngine({ quiz, questions, participant }: { quiz: Qui
             <ShieldAlert className="w-10 h-10" />
           </div>
           
-          <h2 className="text-3xl font-bold text-neu-text text-center mb-8">Examination Rules</h2>
+          <h2 className="text-3xl font-bold text-neu-text text-center mb-8">Quiz Rules</h2>
           
           <div className="space-y-6 mb-10">
             <div className="p-6 rounded-2xl bg-neu-bg shadow-neu-pressed-sm space-y-2">
@@ -201,18 +200,9 @@ export default function QuizEngine({ quiz, questions, participant }: { quiz: Qui
           <h2 className="text-3xl font-bold text-neu-text mb-4">Test Submitted!</h2>
           <p className="text-neu-text-light mb-8">Thank you, {participant.name}. Your responses have been recorded safely.</p>
           
-          {quiz.show_results && result ? (
-            <div className="mb-8 p-6 rounded-2xl bg-neu-bg shadow-neu-pressed-sm">
-              <p className="text-sm font-bold text-neu-text-light uppercase tracking-wider mb-2">Final Score</p>
-              <p className="text-5xl font-black text-neu-blue">
-                {result.score} <span className="text-2xl text-neu-text-light">/ {result.total}</span>
-              </p>
-            </div>
-          ) : (
-            <div className="mb-8 p-4 rounded-xl bg-neu-bg shadow-neu-pressed-sm text-sm text-neu-text-light">
-              Scores are currently hidden by the admin.
-            </div>
-          )}
+          <div className="mb-8 p-4 rounded-xl bg-neu-bg shadow-neu-pressed-sm text-sm text-neu-text-light">
+            Result will be published soon.
+          </div>
 
           <Link href="/dashboard" className="w-full block py-4 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold active:shadow-neu-pressed transition-all">
             Return to Dashboard
@@ -297,6 +287,17 @@ export default function QuizEngine({ quiz, questions, participant }: { quiz: Qui
               {currentQ.points} Pts
             </div>
           </div>
+
+          {currentQ.statements && currentQ.statements.length > 0 && (
+            <div className="space-y-4 mb-8 pl-4 border-l-4 border-neu-blue ml-2">
+              {currentQ.statements.map((stmt, sIndex) => (
+                <div key={sIndex} className="flex items-start gap-4">
+                  <span className="text-lg font-black text-neu-text-light w-8 shrink-0 pt-1">{String.fromCharCode(97 + sIndex)})</span>
+                  <p className="flex-1 text-lg font-bold text-neu-text-light leading-snug bg-neu-bg shadow-neu-pressed-sm p-4 rounded-2xl">{stmt}</p>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="space-y-4 mt-auto">
             {currentQ.options.map((opt) => {

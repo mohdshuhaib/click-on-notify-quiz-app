@@ -4,13 +4,12 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Plus } from "lucide-react";
-import { updateFullQuiz } from "../../actions";
-import { QuizState, Question } from "../../new/types";
+import { updateFullQuiz } from "./actions";
+import { QuizState, Question } from "./types";
 
-// Reuse our components from the 'new' folder!
-import QuizSettings from "../../new/components/QuizSettings";
-import QuestionCard from "../../new/components/QuestionCard";
-import StickySaveBar from "../../new/components/StickySaveBar";
+import QuizSettings from "./components/QuizSettings";
+import QuestionCard from "./components/QuestionCard";
+import StickySaveBar from "./components/StickySaveBar";
 
 interface Props {
   quizId: string;
@@ -23,7 +22,6 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // Initialize state with the data fetched from the database
   const [quiz, setQuiz] = useState<QuizState>(initialQuizState);
   const [questions, setQuestions] = useState<Question[]>(initialQuestions);
 
@@ -54,26 +52,33 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
       setErrorMsg(result.error);
       setIsSaving(false);
     } else {
-      router.push("/admin/quiz-settings");
+      router.refresh();
+      if (isPublished) {
+         setErrorMsg("Quiz Published Successfully!");
+      } else {
+         setErrorMsg("Draft Saved Successfully!");
+      }
+      setTimeout(() => setErrorMsg(""), 3000);
+      setIsSaving(false);
     }
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-32 min-h-screen p-4 md:p-8">
+    <div className="max-w-4xl mx-auto pb-48 min-h-screen p-4 md:p-8">
 
       {/* Header */}
       <div className="flex items-center gap-6 mb-12">
-        <Link href="/admin/quiz-settings" className="p-4 rounded-xl bg-neu-bg shadow-neu-flat text-neu-text-light hover:text-neu-blue active:shadow-neu-pressed transition-all">
+        <Link href="/admin/dashboard" className="p-4 rounded-xl bg-neu-bg shadow-neu-flat text-neu-text-light hover:text-neu-blue active:shadow-neu-pressed transition-all">
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-neu-text">Edit Quiz</h1>
-          <p className="text-neu-text-light font-medium mt-1">Update your test questions and configurations.</p>
+          <h1 className="text-3xl font-bold text-neu-text">Quiz Settings</h1>
+          <p className="text-neu-text-light font-medium mt-1">Update your mega quiz configurations.</p>
         </div>
       </div>
 
       {errorMsg && (
-        <div className="mb-8 p-6 rounded-2xl bg-neu-bg shadow-neu-pressed border-l-4 border-neu-red text-neu-red font-bold">
+        <div className={`mb-8 p-6 rounded-2xl bg-neu-bg shadow-neu-pressed border-l-4 font-bold ${errorMsg.includes("Successfully") ? "border-neu-green text-neu-green" : "border-neu-red text-neu-red"}`}>
           {errorMsg}
         </div>
       )}
@@ -101,6 +106,9 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
           <Plus className="w-6 h-6" /> Add Another Question
         </button>
       </div>
+
+      {/* Spacer to ensure scrolling past the sticky bar on desktop */}
+      <div className="h-40 md:h-64 w-full shrink-0"></div>
 
       <StickySaveBar
         questionCount={questions.length}

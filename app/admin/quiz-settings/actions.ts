@@ -19,14 +19,7 @@ export async function saveFullQuiz(quizData: any, questionsData: any[]) {
   }
 
   try {
-    let finalPassword = quizData.quiz_password;
-    if (finalPassword && finalPassword.length > 0) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(finalPassword);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      finalPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    // Removed password hashing
 
     const { data: newQuiz, error: quizError } = await supabase
       .from('quizzes')
@@ -35,12 +28,8 @@ export async function saveFullQuiz(quizData: any, questionsData: any[]) {
         title: quizData.title,
         description: quizData.description,
         time_limit_seconds: quizData.time_limit_seconds,
-        require_password: quizData.require_password,
-        quiz_password: finalPassword,
         shuffle_questions: quizData.shuffle_questions,
         is_published: quizData.is_published,
-        intro_fields: quizData.intro_fields || [],
-        show_results: quizData.show_results !== undefined ? quizData.show_results : true,
         start_time: formatToISO(quizData.start_time),
         end_time: formatToISO(quizData.end_time)
       })
@@ -99,15 +88,7 @@ export async function updateFullQuiz(quizId: string, quizData: any, questionsDat
   if (!user) return { error: "Unauthorized" };
 
   try {
-    let finalPassword = quizData.quiz_password;
-    // Only hash it if it's not already a 64-character hex string (which means it was left unchanged)
-    if (finalPassword && finalPassword.length > 0 && finalPassword.length !== 64) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(finalPassword);
-      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-      const hashArray = Array.from(new Uint8Array(hashBuffer));
-      finalPassword = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    }
+    // Removed password hashing
 
     // 1. Update the Quiz Settings
     const { error: quizError } = await supabase
@@ -116,12 +97,8 @@ export async function updateFullQuiz(quizId: string, quizData: any, questionsDat
         title: quizData.title,
         description: quizData.description,
         time_limit_seconds: quizData.time_limit_seconds,
-        require_password: quizData.require_password,
-        quiz_password: finalPassword,
         shuffle_questions: quizData.shuffle_questions,
         is_published: quizData.is_published,
-        intro_fields: quizData.intro_fields || [],
-        show_results: quizData.show_results !== undefined ? quizData.show_results : true,
         start_time: formatToISO(quizData.start_time),
         end_time: formatToISO(quizData.end_time)
       })

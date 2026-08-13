@@ -2,7 +2,8 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
-import { User, LogOut, FileText, CheckCircle } from 'lucide-react'
+import { User, LogOut } from 'lucide-react'
+import QuizDashboardCard from './components/QuizDashboardCard'
 
 export default async function ParticipantDashboard() {
   const cookieStore = await cookies()
@@ -102,45 +103,7 @@ export default async function ParticipantDashboard() {
             <p className="text-neu-text-light">Your assigned quiz will appear here when ready.</p>
           </div>
 
-          <div className="p-8 rounded-2xl bg-neu-bg shadow-neu-pressed-sm flex flex-col items-center justify-center space-y-6">
-            {!quiz ? (
-              <>
-                <FileText className="w-16 h-16 text-neu-text-light opacity-50" />
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-neu-text">Quiz Starts Soon</h3>
-                  <p className="text-neu-text-light mt-2">The admin has not published the quiz yet. Please wait.</p>
-                </div>
-                <button disabled className="px-8 py-4 rounded-xl bg-neu-bg shadow-neu-flat opacity-50 cursor-not-allowed font-bold text-neu-text-light w-full max-w-xs">
-                  Waiting...
-                </button>
-              </>
-            ) : hasSubmitted ? (
-              <>
-                <CheckCircle className="w-16 h-16 text-neu-green" />
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-neu-text">Quiz Completed</h3>
-                  <p className="text-neu-text-light mt-2">You have successfully participated in this quiz.</p>
-                </div>
-                <button disabled className="px-8 py-4 rounded-xl bg-neu-bg shadow-neu-pressed-sm font-bold text-neu-green w-full max-w-xs flex items-center justify-center gap-2">
-                  <CheckCircle className="w-5 h-5" /> Done
-                </button>
-              </>
-            ) : (
-              <>
-                <FileText className="w-16 h-16 text-neu-blue" />
-                <div className="text-center">
-                  <h3 className="text-xl font-bold text-neu-text">{quiz.title}</h3>
-                  <p className="text-neu-text-light mt-2">{quiz.time_limit ? `${quiz.time_limit} Minutes` : 'No time limit'} • Good Luck!</p>
-                </div>
-                <Link 
-                  href={`/q/${quiz.id}`}
-                  className="px-8 py-4 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center w-full max-w-xs hover:shadow-neu-pressed transition-all active:scale-95"
-                >
-                  Start Quiz Now
-                </Link>
-              </>
-            )}
-          </div>
+          <QuizDashboardCard quiz={quiz} hasSubmitted={hasSubmitted} />
         </div>
       </div>
     </div>

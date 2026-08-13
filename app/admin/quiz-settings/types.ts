@@ -24,12 +24,8 @@ export interface QuizState {
   title: string;
   description: string;
   time_limit_seconds: number | null;
-  require_password: boolean;
-  quiz_password: string;
   shuffle_questions: boolean;
   is_published: boolean;
-  intro_fields: IntroField[];
-  show_results: boolean;
   start_time: string | null; // NEW: Schedule Start
   end_time: string | null;   // NEW: Schedule End
 }

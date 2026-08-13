@@ -1,7 +1,8 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { Users, Settings, Trophy, LogOut, Activity } from 'lucide-react'
+import { Users, Settings, Trophy, LogOut, Activity, HardDrive } from 'lucide-react'
+import { adminLogout } from '../logout-action'
 
 export default async function AdminDashboard() {
   const cookieStore = await cookies()
@@ -32,7 +33,7 @@ export default async function AdminDashboard() {
       <nav className="w-full max-w-5xl flex justify-between items-center mb-8 bg-neu-bg p-4 rounded-2xl shadow-neu-flat">
         <h1 className="text-xl font-bold text-neu-text tracking-tight">Admin Dashboard</h1>
         
-        <form action="/auth/signout" method="post">
+        <form action={adminLogout}>
           <button type="submit" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neu-bg shadow-neu-flat text-neu-red font-semibold hover:shadow-neu-pressed transition-all text-sm">
             <LogOut className="w-4 h-4" /> Logout
           </button>
@@ -63,7 +64,7 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-3 gap-8">
+      <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
         {/* Navigation Cards */}
         <Link href="/admin/participants" className="group bg-neu-bg rounded-3xl p-8 shadow-neu-flat flex flex-col items-center justify-center text-center space-y-4 hover:shadow-neu-pressed transition-all">
           <div className="w-16 h-16 rounded-full bg-neu-bg shadow-neu-flat group-hover:shadow-neu-pressed-sm flex items-center justify-center text-neu-blue transition-all">
@@ -92,6 +93,16 @@ export default async function AdminDashboard() {
           <div>
             <h3 className="text-xl font-bold text-neu-text">Winners & Results</h3>
             <p className="text-sm text-neu-text-light mt-1">View leaderboard</p>
+          </div>
+        </Link>
+
+        <Link href="/admin/general-settings" className="group bg-neu-bg rounded-3xl p-8 shadow-neu-flat flex flex-col items-center justify-center text-center space-y-4 hover:shadow-neu-pressed transition-all">
+          <div className="w-16 h-16 rounded-full bg-neu-bg shadow-neu-flat group-hover:shadow-neu-pressed-sm flex items-center justify-center text-neu-red transition-all">
+            <HardDrive className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-neu-text">General Settings</h3>
+            <p className="text-sm text-neu-text-light mt-1">Database resets & config</p>
           </div>
         </Link>
       </div>

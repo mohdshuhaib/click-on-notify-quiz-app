@@ -8,7 +8,7 @@ interface Props {
 
 export default function StickySaveBar({ questionCount, isSaving, onSave }: Props) {
   return (
-    <div className="fixed bottom-0 left-0 md:left-64 right-0 bg-transparent p-4 z-20 pointer-events-none">
+    <div className="fixed bottom-0 left-0 right-0 bg-transparent p-4 md:p-8 z-20 pointer-events-none">
       <div className="max-w-4xl mx-auto flex items-center justify-between bg-neu-bg/90 backdrop-blur-md p-4 rounded-[32px] shadow-neu-flat border border-white/20 pointer-events-auto">
         <p className="text-sm font-bold text-neu-text-light hidden sm:block ml-4">
           {questionCount} Question{questionCount !== 1 ? 's' : ''} ready

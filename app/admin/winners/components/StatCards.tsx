@@ -35,13 +35,13 @@ export default function StatCards({ submissions }: { submissions: any[] }) {
       {stats.map((stat, i) => {
         const Icon = stat.icon;
         return (
-          <div key={i} className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex items-center gap-4">
-            <div className={`w-12 h-12 rounded-full flex items-center justify-center ${stat.bg} ${stat.color}`}>
-              <Icon className="w-6 h-6" />
+          <div key={i} className="bg-neu-bg rounded-[32px] p-6 shadow-neu-flat flex items-center gap-4">
+            <div className={`w-14 h-14 rounded-2xl flex items-center justify-center bg-neu-bg shadow-neu-pressed-sm ${stat.color}`}>
+              <Icon className="w-7 h-7" />
             </div>
             <div>
-              <p className="text-sm font-medium text-slate-500">{stat.label}</p>
-              <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+              <p className="text-sm font-bold text-neu-text-light uppercase tracking-wider">{stat.label}</p>
+              <p className="text-3xl font-black text-neu-text mt-1">{stat.value}</p>
             </div>
           </div>
         );
