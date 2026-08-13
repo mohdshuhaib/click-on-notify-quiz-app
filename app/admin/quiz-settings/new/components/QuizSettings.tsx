@@ -24,43 +24,45 @@ export default function QuizSettings({ quiz, onChange }: Props) {
   };
 
   return (
-    <div className="space-y-6 mb-8">
+    <div className="space-y-8 mb-12">
       {/* --- GENERAL SETTINGS CARD --- */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-4">
-          <Settings2 className="w-5 h-5 text-blue-600" />
-          <h2 className="text-lg font-bold text-slate-900">General Settings</h2>
+      <div className="bg-neu-bg rounded-[32px] shadow-neu-flat p-6 md:p-8">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="p-3 bg-neu-bg rounded-xl shadow-neu-pressed-sm text-neu-blue">
+            <Settings2 className="w-6 h-6" />
+          </div>
+          <h2 className="text-2xl font-bold text-neu-text">General Settings</h2>
         </div>
 
-        <div className="space-y-5 font-anek">
+        <div className="space-y-6 font-anek">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Quiz Title *</label>
+            <label className="block text-sm font-bold text-neu-text-light mb-2 ml-2">Quiz Title *</label>
             <input
               type="text"
-              placeholder="e.g. Midterm History Exam"
-              value={quiz.title}
+              placeholder="e.g. Mega Quiz Competition"
+              value={quiz.title || ""}
               onChange={e => updateField("title", e.target.value)}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none"
+              className="w-full rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-5 py-4 outline-none text-neu-text placeholder:text-neu-text-light/50 focus:ring-2 focus:ring-neu-blue/50 font-bold"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Description (Optional)</label>
+            <label className="block text-sm font-bold text-neu-text-light mb-2 ml-2">Description (Optional)</label>
             <textarea
               placeholder="Instructions or notes for the respondents..."
-              value={quiz.description}
+              value={quiz.description || ""}
               onChange={e => updateField("description", e.target.value)}
               rows={3}
-              className="w-full rounded-lg border border-slate-300 px-4 py-2.5 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none resize-none"
+              className="w-full rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-5 py-4 outline-none text-neu-text placeholder:text-neu-text-light/50 focus:ring-2 focus:ring-neu-blue/50 resize-none font-medium"
             />
           </div>
 
           {/* --- SCHEDULING SECTION WITH CLEAR BUTTONS --- */}
-          <div className="grid sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+          <div className="grid sm:grid-cols-2 gap-6 pt-6 mt-2">
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 flex items-center gap-1.5">
-                <CalendarDays className="w-4 h-4 text-slate-400" /> Start Time (Optional)
+              <label className="text-sm font-bold text-neu-text-light mb-2 ml-2 flex items-center gap-2">
+                <CalendarDays className="w-4 h-4 text-neu-blue" /> Start Time (Optional)
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <input
                   type="datetime-local"
                   value={formatForInput(quiz.start_time)}
@@ -73,13 +75,13 @@ export default function QuizSettings({ quiz, onChange }: Props) {
                       updateField("start_time", localDate.toISOString());
                     }
                   }}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-600 outline-none"
+                  className="flex-1 rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-4 py-3 outline-none text-neu-text focus:ring-2 focus:ring-neu-blue/50 font-medium"
                 />
                 {quiz.start_time && (
                   <button
                     type="button"
                     onClick={() => updateField("start_time", null)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
+                    className="p-3 bg-neu-bg shadow-neu-flat rounded-xl text-neu-text-light hover:text-neu-red active:shadow-neu-pressed transition-all shrink-0"
                     title="Clear Start Time"
                   >
                     <X className="w-5 h-5" />
@@ -88,10 +90,10 @@ export default function QuizSettings({ quiz, onChange }: Props) {
               </div>
             </div>
             <div>
-              <label className="text-sm font-medium text-slate-700 mb-1 flex items-center gap-1.5">
-                <CalendarDays className="w-4 h-4 text-slate-400" /> End Time (Optional)
+              <label className="text-sm font-bold text-neu-text-light mb-2 ml-2 flex items-center gap-2">
+                <CalendarDays className="w-4 h-4 text-neu-blue" /> End Time (Optional)
               </label>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-3">
                 <input
                   type="datetime-local"
                   value={formatForInput(quiz.end_time)}
@@ -103,13 +105,13 @@ export default function QuizSettings({ quiz, onChange }: Props) {
                       updateField("end_time", localDate.toISOString());
                     }
                   }}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-600 outline-none"
+                  className="flex-1 rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-4 py-3 outline-none text-neu-text focus:ring-2 focus:ring-neu-blue/50 font-medium"
                 />
                 {quiz.end_time && (
                   <button
                     type="button"
                     onClick={() => updateField("end_time", null)}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
+                    className="p-3 bg-neu-bg shadow-neu-flat rounded-xl text-neu-text-light hover:text-neu-red active:shadow-neu-pressed transition-all shrink-0"
                     title="Clear End Time"
                   >
                     <X className="w-5 h-5" />
@@ -119,11 +121,11 @@ export default function QuizSettings({ quiz, onChange }: Props) {
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
+          <div className="grid sm:grid-cols-2 gap-6 pt-6">
             {/* Precise Timer Inputs */}
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Time Limit</label>
-              <div className="flex items-center gap-2">
+              <label className="block text-sm font-bold text-neu-text-light mb-2 ml-2">Time Limit</label>
+              <div className="flex items-center gap-3">
 
                 {/* Minutes Input */}
                 <input
@@ -141,9 +143,9 @@ export default function QuizSettings({ quiz, onChange }: Props) {
                     const currentSecs = typeof quiz.time_limit_seconds === 'number' ? quiz.time_limit_seconds % 60 : 0;
                     updateField("time_limit_seconds", (mins * 60) + currentSecs);
                   }}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-600 outline-none"
+                  className="w-full rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-4 py-3 outline-none text-neu-text text-center focus:ring-2 focus:ring-neu-blue/50 font-bold text-lg"
                 />
-                <span className="text-slate-500 font-medium">m</span>
+                <span className="text-neu-text-light font-bold">m</span>
 
                 {/* Seconds Input */}
                 <input
@@ -162,159 +164,36 @@ export default function QuizSettings({ quiz, onChange }: Props) {
                     const currentMins = typeof quiz.time_limit_seconds === 'number' ? Math.floor(quiz.time_limit_seconds / 60) : 0;
                     updateField("time_limit_seconds", (currentMins * 60) + secs);
                   }}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-600 outline-none"
+                  className="w-full rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-4 py-3 outline-none text-neu-text text-center focus:ring-2 focus:ring-neu-blue/50 font-bold text-lg"
                 />
-                <span className="text-slate-500 font-medium">s</span>
+                <span className="text-neu-text-light font-bold">s</span>
 
               </div>
             </div>
 
-            <div className="flex flex-col justify-center gap-4 mt-2">
-              <label className="flex items-center gap-3 cursor-pointer">
+            <div className="flex flex-col justify-center gap-6 mt-4">
+              <label className="flex items-center gap-4 cursor-pointer group">
+                <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all ${quiz.shuffle_questions ? 'bg-neu-blue text-white shadow-neu-pressed-sm' : 'bg-neu-bg shadow-neu-pressed-sm text-transparent group-hover:shadow-neu-flat'}`}>
+                   <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M0 11l2-2 5 5L18 3l2 2L7 18z"/></svg>
+                </div>
                 <input
                   type="checkbox"
-                  checked={quiz.shuffle_questions}
+                  checked={!!quiz.shuffle_questions}
                   onChange={e => updateField("shuffle_questions", e.target.checked)}
-                  className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-600"
+                  className="hidden"
                 />
-                <span className="text-sm font-medium text-slate-700">Shuffle Questions</span>
+                <span className="text-base font-bold text-neu-text">Shuffle Questions</span>
               </label>
 
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={quiz.show_results}
-                  onChange={e => updateField("show_results", e.target.checked)}
-                  className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-600"
-                />
-                <span className="text-sm font-medium text-slate-700">Show score after submission</span>
-              </label>
+
             </div>
           </div>
 
-          <div className="grid sm:grid-cols-2 gap-6 pt-4 border-t border-slate-100">
-            <div className="flex items-center mt-2">
-              <label className="flex items-center gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={quiz.require_password}
-                  onChange={e => updateField("require_password", e.target.checked)}
-                  className="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-600"
-                />
-                <span className="text-sm font-medium text-slate-700">Require Password to enter</span>
-              </label>
-            </div>
-            {quiz.require_password && (
-              <div>
-                <input
-                  type="text"
-                  placeholder="Enter quiz password"
-                  value={quiz.quiz_password}
-                  onChange={e => updateField("quiz_password", e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 px-4 py-2 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 outline-none"
-                />
-              </div>
-            )}
-          </div>
+
         </div>
       </div>
 
-      {/* --- DYNAMIC INTRO FORM BUILDER CARD --- */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <div className="flex items-center gap-2 mb-4 border-b border-slate-100 pb-4">
-          <UserPlus className="w-5 h-5 text-blue-600" />
-          <div>
-            <h2 className="text-lg font-bold text-slate-900">Candidate Information Form</h2>
-            <p className="text-sm text-slate-500">What details must candidates provide before starting?</p>
-          </div>
-        </div>
 
-        <div className="space-y-4 font-anek">
-          {(!quiz.intro_fields || quiz.intro_fields.length === 0) && (
-            <div className="p-4 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-600 text-center">
-              No custom fields added. Candidates will only be asked for their "Full Name" by default.
-            </div>
-          )}
-
-          {quiz.intro_fields?.map((field, index) => (
-            <div key={field.id} className="flex flex-col gap-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
-              <div className="flex flex-col sm:flex-row gap-3 items-start w-full">
-                <input
-                  type="text"
-                  placeholder="Field Label (e.g. Email, Class, Roll No)"
-                  value={field.label}
-                  onChange={(e) => {
-                    const newFields = [...quiz.intro_fields];
-                    newFields[index].label = e.target.value;
-                    updateField("intro_fields", newFields);
-                  }}
-                  className="flex-1 w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600"
-                />
-
-                <div className="flex items-center gap-2 w-full sm:w-auto shrink-0">
-                  <select
-                    value={field.type}
-                    onChange={(e) => {
-                      const newFields = [...quiz.intro_fields];
-                      newFields[index].type = e.target.value as any;
-
-                      if (e.target.value === 'select' && (!newFields[index].options || newFields[index].options.length === 0)) {
-                        newFields[index].options = ["Class A", "Class B"];
-                      }
-                      updateField("intro_fields", newFields);
-                    }}
-                    className="flex-1 sm:w-36 rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none bg-white focus:border-blue-600"
-                  >
-                    <option value="text">Short Text</option>
-                    <option value="email">Email</option>
-                    <option value="tel">Phone Number</option>
-                    <option value="select">Dropdown</option>
-                  </select>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      updateField("intro_fields", quiz.intro_fields.filter(f => f.id !== field.id));
-                    }}
-                    className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors shrink-0"
-                    title="Remove Field"
-                  >
-                    <Trash2 className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
-
-              {field.type === 'select' && (
-                <div className="w-full pl-1 border-l-4 border-blue-400 mt-1">
-                  <input
-                    type="text"
-                    placeholder="Separate options with commas (e.g. Math, Science, Art)"
-                    value={field.options?.join(",") || ""}
-                    onChange={(e) => {
-                      const newFields = [...quiz.intro_fields];
-                      newFields[index].options = e.target.value.split(",");
-                      updateField("intro_fields", newFields);
-                    }}
-                    className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-blue-600 ml-2"
-                  />
-                  <p className="text-xs text-slate-500 mt-1 ml-2">Type your choices separated by a comma.</p>
-                </div>
-              )}
-            </div>
-          ))}
-
-          <button
-            type="button"
-            onClick={() => {
-              const newField: IntroField = { id: crypto.randomUUID(), label: "", type: "text", required: true };
-              updateField("intro_fields", [...(quiz.intro_fields || []), newField]);
-            }}
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700 hover:bg-blue-50 px-4 py-2 rounded-lg transition-colors inline-block mt-2"
-          >
-            + Add Custom Field
-          </button>
-        </div>
-      </div>
     </div>
   );
 }

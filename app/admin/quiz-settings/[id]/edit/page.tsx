@@ -23,7 +23,6 @@ export default async function EditQuizPage({
     .from("quizzes")
     .select("*")
     .eq("id", quizId)
-    .eq("creator_id", user.id)
     .single();
 
   if (quizError || !quiz) redirect("/admin/quiz-settings");

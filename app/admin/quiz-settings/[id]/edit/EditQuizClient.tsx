@@ -59,21 +59,21 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
   };
 
   return (
-    <div className="max-w-4xl mx-auto pb-32">
+    <div className="max-w-4xl mx-auto pb-32 min-h-screen p-4 md:p-8">
 
       {/* Header */}
-      <div className="flex items-center gap-4 mb-8">
-        <Link href="/admin/quiz-settings" className="p-2 rounded-full hover:bg-slate-200 transition-colors text-slate-500">
-          <ArrowLeft className="w-5 h-5" />
+      <div className="flex items-center gap-6 mb-12">
+        <Link href="/admin/quiz-settings" className="p-4 rounded-xl bg-neu-bg shadow-neu-flat text-neu-text-light hover:text-neu-blue active:shadow-neu-pressed transition-all">
+          <ArrowLeft className="w-6 h-6" />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-slate-900">Edit Quiz</h1>
-          <p className="text-slate-600">Update your test questions and configurations.</p>
+          <h1 className="text-3xl font-bold text-neu-text">Edit Quiz</h1>
+          <p className="text-neu-text-light font-medium mt-1">Update your test questions and configurations.</p>
         </div>
       </div>
 
       {errorMsg && (
-        <div className="mb-6 p-4 rounded-lg bg-red-50 text-red-600 border border-red-200">
+        <div className="mb-8 p-6 rounded-2xl bg-neu-bg shadow-neu-pressed border-l-4 border-neu-red text-neu-red font-bold">
           {errorMsg}
         </div>
       )}
@@ -81,7 +81,8 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
       {/* Modular Components - Loaded with existing data */}
       <QuizSettings quiz={quiz} onChange={setQuiz} />
 
-      <div className="space-y-6 font-anek">
+      <div className="space-y-8 font-anek mt-12">
+        <h2 className="text-2xl font-bold text-neu-text px-4">Questions</h2>
         {questions.map((q, index) => (
           <QuestionCard
             key={q.id}
@@ -95,9 +96,9 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
 
         <button
           onClick={addManualQuestion}
-          className="w-full py-4 border-2 border-dashed border-slate-300 bg-white rounded-2xl text-slate-500 font-semibold hover:border-slate-400 hover:text-slate-700 transition-all flex items-center justify-center gap-2"
+          className="w-full py-6 mt-4 bg-neu-bg shadow-neu-flat rounded-[32px] text-neu-text font-bold hover:text-neu-blue hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all flex items-center justify-center gap-2"
         >
-          <Plus className="w-5 h-5" /> Add Another Question
+          <Plus className="w-6 h-6" /> Add Another Question
         </button>
       </div>
 

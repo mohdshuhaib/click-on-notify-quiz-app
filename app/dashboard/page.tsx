@@ -43,7 +43,7 @@ export default async function ParticipantDashboard() {
     .eq('is_published', true)
     .order('created_at', { ascending: false })
     .limit(1)
-    .single()
+    .maybeSingle()
 
   // Check if participant already submitted
   let hasSubmitted = false
@@ -53,7 +53,7 @@ export default async function ParticipantDashboard() {
       .select('id')
       .eq('quiz_id', quiz.id)
       .eq('participant_id', participant.id)
-      .single()
+      .maybeSingle()
     
     if (submission) {
       hasSubmitted = true

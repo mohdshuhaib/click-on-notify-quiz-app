@@ -71,79 +71,79 @@ export default function QuestionCard({ question, index, canDelete, onChange, onD
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
-      <div className="bg-slate-50 border-b border-slate-200 p-4 flex justify-between items-center gap-4">
-        <span className="font-bold text-slate-700">Question {index + 1}</span>
+    <div className="bg-neu-bg rounded-[32px] shadow-neu-flat overflow-hidden mb-8">
+      <div className="p-6 md:p-8 flex justify-between items-center gap-4">
+        <span className="font-black text-neu-text text-2xl">Question {index + 1}</span>
 
-        <div className="flex items-center gap-3">
-          {/* NEW: Custom Points Input */}
-          <div className="flex items-center bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
-            <div className="bg-slate-100 px-3 py-1.5 border-r border-slate-200 flex items-center gap-1.5 text-slate-600">
-              <Award className="w-4 h-4" />
-              <span className="text-xs font-bold uppercase tracking-wider">Marks</span>
+        <div className="flex items-center gap-4">
+          {/* Custom Points Input */}
+          <div className="flex items-center bg-neu-bg shadow-neu-pressed-sm rounded-2xl overflow-hidden">
+            <div className="px-4 py-3 flex items-center gap-2 text-neu-text-light border-r border-slate-300/20">
+              <Award className="w-5 h-5 text-neu-blue" />
+              <span className="text-xs font-black uppercase tracking-wider">Marks</span>
             </div>
             <input
               type="number"
               min="1"
               value={question.points || 1}
               onChange={(e) => updatePoints(parseInt(e.target.value) || 1)}
-              className="w-16 px-3 py-1.5 text-sm font-bold text-slate-900 outline-none text-center focus:bg-blue-50 transition-colors"
+              className="w-16 px-3 py-3 text-lg font-black text-neu-text bg-transparent outline-none text-center focus:bg-neu-bg/50 transition-colors"
             />
           </div>
 
           {canDelete && (
             <button
               onClick={onDelete}
-              className="text-slate-400 hover:text-red-600 transition-colors p-1"
+              className="p-4 bg-neu-bg shadow-neu-flat rounded-2xl text-neu-text-light hover:text-neu-red active:shadow-neu-pressed transition-all"
             >
-              <Trash2 className="w-5 h-5" />
+              <Trash2 className="w-6 h-6" />
             </button>
           )}
         </div>
       </div>
 
-      <div className="p-6 space-y-6 font-anek">
-        <input
-          type="text"
+      <div className="p-6 md:p-8 space-y-8 font-anek pt-0">
+        <textarea
           placeholder="Type your question here..."
           value={question.text}
           onChange={(e) => updateText(e.target.value)}
-          className="w-full text-lg font-medium border-b-2 border-slate-200 px-0 py-2 focus:border-blue-600 focus:ring-0 outline-none placeholder:text-slate-300"
+          rows={2}
+          className="w-full text-xl md:text-2xl font-bold bg-neu-bg shadow-neu-pressed-sm rounded-2xl px-6 py-5 focus:ring-2 focus:ring-neu-blue/50 outline-none text-neu-text placeholder:text-neu-text-light/50 resize-none"
         />
 
         {question.statements !== undefined && question.statements.length > 0 && (
-          <div className="space-y-3 pl-4 border-l-2 border-indigo-200 ml-2 mt-4">
-            <h4 className="text-xs font-bold text-indigo-500 uppercase tracking-widest mb-2">Sub-Statements</h4>
+          <div className="space-y-4 pl-4 border-l-4 border-neu-blue ml-2">
+            <h4 className="text-sm font-black text-neu-blue uppercase tracking-widest mb-4">Sub-Statements</h4>
             {question.statements.map((stmt, sIndex) => (
-              <div key={sIndex} className="flex items-center gap-3">
-                <span className="text-sm font-bold text-slate-400 w-6 shrink-0">{String.fromCharCode(97 + sIndex)})</span>
+              <div key={sIndex} className="flex items-center gap-4">
+                <span className="text-lg font-black text-neu-text-light w-8 shrink-0">{String.fromCharCode(97 + sIndex)})</span>
                 <input
                   type="text"
                   placeholder={`Statement ${sIndex + 1}`}
                   value={stmt}
                   onChange={(e) => updateStatementText(sIndex, e.target.value)}
-                  className="flex-1 rounded-lg border border-slate-200 px-4 py-2 outline-none focus:border-indigo-600 transition-colors bg-white"
+                  className="flex-1 rounded-2xl bg-neu-bg shadow-neu-pressed-sm px-5 py-4 outline-none text-neu-text focus:ring-2 focus:ring-neu-blue/50 font-bold text-lg"
                 />
                 <button
                   onClick={() => removeStatement(sIndex)}
-                  className="shrink-0 text-slate-300 hover:text-red-500 p-2"
+                  className="shrink-0 p-4 bg-neu-bg shadow-neu-flat rounded-xl text-neu-text-light hover:text-neu-red active:shadow-neu-pressed transition-all"
                   title="Remove Statement"
                 >
-                  <Trash2 className="w-4 h-4" />
+                  <Trash2 className="w-5 h-5" />
                 </button>
               </div>
             ))}
           </div>
         )}
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {question.options.map((opt, oIndex) => (
-            <div key={opt.id} className="flex items-center gap-3">
+            <div key={opt.id} className="flex items-center gap-4">
               <button
                 onClick={() => setCorrectOption(opt.id)}
-                className={`shrink-0 ${opt.isCorrect ? 'text-green-500' : 'text-slate-300 hover:text-slate-400'}`}
+                className={`shrink-0 w-14 h-14 flex items-center justify-center rounded-2xl shadow-neu-flat active:shadow-neu-pressed transition-all ${opt.isCorrect ? 'text-neu-green shadow-neu-pressed-sm bg-neu-bg/50' : 'text-neu-text-light hover:text-neu-blue'}`}
               >
-                {opt.isCorrect ? <CheckCircle2 className="w-6 h-6" /> : <Circle className="w-6 h-6" />}
+                {opt.isCorrect ? <CheckCircle2 className="w-8 h-8" /> : <Circle className="w-8 h-8" />}
               </button>
 
               <input
@@ -151,34 +151,34 @@ export default function QuestionCard({ question, index, canDelete, onChange, onD
                 placeholder={`Option ${oIndex + 1}`}
                 value={opt.text}
                 onChange={(e) => updateOptionText(opt.id, e.target.value)}
-                className={`flex-1 rounded-lg border px-4 py-2 outline-none transition-colors ${
-                  opt.isCorrect ? 'border-green-300 bg-green-50/30 focus:border-green-500' : 'border-slate-200 focus:border-blue-600'
+                className={`flex-1 rounded-2xl px-5 py-4 outline-none font-bold text-lg transition-all ${
+                  opt.isCorrect ? 'bg-neu-bg shadow-neu-pressed-sm text-neu-green ring-2 ring-neu-green/30' : 'bg-neu-bg shadow-neu-flat text-neu-text focus:shadow-neu-pressed-sm focus:ring-2 focus:ring-neu-blue/30'
                 }`}
               />
 
               <button
                 onClick={() => removeOption(opt.id)}
-                className="shrink-0 text-slate-300 hover:text-red-500 p-2 disabled:opacity-30 disabled:hover:text-slate-300"
+                className="shrink-0 p-4 bg-neu-bg shadow-neu-flat rounded-2xl text-neu-text-light hover:text-neu-red active:shadow-neu-pressed transition-all disabled:opacity-30 disabled:shadow-neu-flat"
                 disabled={question.options.length <= 2}
               >
-                <Trash2 className="w-4 h-4" />
+                <Trash2 className="w-6 h-6" />
               </button>
             </div>
           ))}
         </div>
 
-        <div className="flex gap-6 mt-4 pt-4 border-t border-slate-100">
+        <div className="flex flex-col sm:flex-row gap-6 mt-8">
           <button
             onClick={addOption}
-            className="text-sm font-semibold text-blue-600 hover:text-blue-700 flex items-center gap-1 transition-colors"
+            className="flex-1 py-5 bg-neu-bg shadow-neu-flat rounded-2xl text-neu-blue font-bold hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all flex items-center justify-center gap-2 text-lg"
           >
-            <Plus className="w-4 h-4" /> Add Option
+            <Plus className="w-6 h-6" /> Add Option
           </button>
           <button
             onClick={addStatement}
-            className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors"
+            className="flex-1 py-5 bg-neu-bg shadow-neu-flat rounded-2xl text-neu-text font-bold hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all flex items-center justify-center gap-2 text-lg"
           >
-            <Plus className="w-4 h-4" /> Add Statement
+            <Plus className="w-6 h-6" /> Add Statement
           </button>
         </div>
       </div>

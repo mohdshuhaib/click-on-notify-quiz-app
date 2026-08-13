@@ -60,8 +60,11 @@ export default function RegisterPage() {
     }
   }
 
+  const [isDownloading, setIsDownloading] = useState(false)
+
   const handleDownloadPDF = async () => {
     if (!pdfRef.current || !result) return
+    setIsDownloading(true)
     try {
       const canvas = await html2canvas(pdfRef.current, { scale: 2 } as any)
       const imgData = canvas.toDataURL('image/png')
@@ -72,6 +75,8 @@ export default function RegisterPage() {
       pdf.save(`Registration_${result.reg_id}.pdf`)
     } catch (error) {
       console.error('Error generating PDF:', error)
+    } finally {
+      setIsDownloading(false)
     }
   }
 
@@ -101,14 +106,17 @@ export default function RegisterPage() {
           >
             <div className="flex justify-between items-center border-b-2 border-slate-300/50 pb-4">
               <h2 className="text-xl font-bold text-neu-text">Click on Notify Quiz</h2>
-              <Image src="/clicknotifylogo.jpeg" alt="Logo" width={50} height={50} className="rounded-full shadow-sm" />
+              {/* @ts-ignore */}
+              <img src="/clicknotifylogo.jpeg" alt="Logo" width={50} height={50} className="rounded-full shadow-sm" crossOrigin="anonymous" />
             </div>
             
             <div className="grid grid-cols-2 gap-4 text-neu-text text-sm">
               <div><span className="font-semibold">Name:</span> {result.data.name}</div>
               <div><span className="font-semibold">DOB:</span> {result.data.dob}</div>
               <div><span className="font-semibold">Phone:</span> {result.data.phone}</div>
-              <div><span className="font-semibold">Email:</span> {result.data.email}</div>
+              <div className="break-all"><span className="font-semibold">Email:</span> {result.data.email}</div>
+              <div className="break-all"><span className="font-semibold">WhatsApp:</span> {result.data.whatsapp}</div>
+              <div className="break-all"><span className="font-semibold">Payment ID:</span> {result.data.payment_id}</div>
               <div className="col-span-2"><span className="font-semibold">Place:</span> {result.data.place}, {result.data.district}</div>
             </div>
 
@@ -135,9 +143,10 @@ export default function RegisterPage() {
             </button>
             <button 
               onClick={handleDownloadPDF}
-              className="flex-1 py-4 px-6 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold flex items-center justify-center gap-2 transition-all active:shadow-neu-pressed"
+              disabled={isDownloading}
+              className="flex-1 py-4 px-6 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold flex items-center justify-center gap-2 transition-all active:shadow-neu-pressed disabled:opacity-50 disabled:shadow-neu-flat"
             >
-              <Download className="w-5 h-5" /> Download PDF
+              <Download className="w-5 h-5" /> {isDownloading ? 'Downloading...' : 'Download PDF'}
             </button>
           </div>
 

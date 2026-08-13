@@ -172,12 +172,20 @@ export default function QuizEngine({ quiz, questions, participant }: { quiz: Qui
             </div>
           </div>
 
-          <button 
-            onClick={startQuiz}
-            className="w-full py-5 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-xl active:shadow-neu-pressed transition-all flex items-center justify-center gap-2"
-          >
-            I Agree, Start Test
-          </button>
+          <div className="flex flex-col sm:flex-row gap-6">
+            <Link 
+              href="/dashboard"
+              className="flex-1 py-5 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-text-light font-bold text-xl active:shadow-neu-pressed transition-all flex items-center justify-center text-center"
+            >
+              Cancel
+            </Link>
+            <button 
+              onClick={startQuiz}
+              className="flex-1 py-5 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-xl active:shadow-neu-pressed transition-all flex items-center justify-center gap-2"
+            >
+              Get into Quiz
+            </button>
+          </div>
         </div>
       </div>
     );
