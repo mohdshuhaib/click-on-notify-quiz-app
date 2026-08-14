@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, Database, Trash2, Users, RefreshCcw, X, AlertCircle } from "lucide-react";
-import { resetQuizSettings, resetParticipantsData, factoryResetAll } from "../actions";
+import { AlertTriangle, Database, Trash2, Users, RefreshCcw, X, AlertCircle, Banknote, Save, BookOpen } from "lucide-react";
+import { resetQuizSettings, resetMockQuizSettings, resetParticipantsData, factoryResetAll, updateUpiId } from "../actions";
 import { useRouter } from "next/navigation";
 
 interface Stats {
@@ -12,12 +12,15 @@ interface Stats {
   hasQuiz: boolean;
 }
 
-export default function SettingsClient({ quizId, stats }: { quizId: string | null, stats: Stats }) {
+export default function SettingsClient({ quizId, currentUpi, stats }: { quizId: string | null, currentUpi: string, stats: Stats }) {
   const router = useRouter();
   
-  const [modalOpen, setModalOpen] = useState<"quiz" | "participants" | "factory" | null>(null);
+  const [modalOpen, setModalOpen] = useState<"quiz" | "mock" | "participants" | "factory" | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [upiValue, setUpiValue] = useState(currentUpi);
+  const [savingUpi, setSavingUpi] = useState(false);
 
   const handleAction = async () => {
     setLoading(true);
@@ -26,6 +29,8 @@ export default function SettingsClient({ quizId, stats }: { quizId: string | nul
     let res;
     if (modalOpen === "quiz") {
       res = await resetQuizSettings();
+    } else if (modalOpen === "mock") {
+      res = await resetMockQuizSettings();
     } else if (modalOpen === "participants") {
       res = await resetParticipantsData();
     } else if (modalOpen === "factory") {
@@ -36,14 +41,60 @@ export default function SettingsClient({ quizId, stats }: { quizId: string | nul
 
     if (res?.success) {
       setModalOpen(null);
+      if (modalOpen === "factory") {
+        setUpiValue("give-your-upi-here@oksbi");
+      }
       router.refresh();
     } else {
       setError(res?.message || "An error occurred.");
     }
   };
 
+  const handleSaveUpi = async () => {
+    if (!upiValue.trim()) return;
+    setSavingUpi(true);
+    const res = await updateUpiId(upiValue.trim());
+    setSavingUpi(false);
+    if (res.success) {
+      router.refresh();
+    }
+  };
+
   return (
     <div className="space-y-8 font-anek">
+      {/* UPI ID Configuration Card */}
+      <div className="bg-neu-bg p-8 rounded-[32px] shadow-neu-flat">
+        <div className="flex items-start justify-between flex-col md:flex-row gap-6">
+          <div className="flex gap-5 flex-1">
+            <div className="w-14 h-14 rounded-2xl bg-neu-bg shadow-neu-pressed-sm flex items-center justify-center text-neu-green shrink-0">
+              <Banknote className="w-7 h-7" />
+            </div>
+            <div className="w-full">
+              <h2 className="text-xl font-black text-neu-text">Payment Configuration</h2>
+              <p className="text-neu-text-light font-bold mt-1 max-w-lg">
+                Set the UPI ID that participants will pay to during registration.
+              </p>
+              <div className="mt-4 flex flex-col sm:flex-row gap-4 items-center w-full max-w-md">
+                <input 
+                  type="text" 
+                  value={upiValue}
+                  onChange={(e) => setUpiValue(e.target.value)}
+                  placeholder="e.g. your-name@oksbi"
+                  className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text focus:outline-none focus:ring-2 focus:ring-neu-blue/50"
+                />
+                <button
+                  onClick={handleSaveUpi}
+                  disabled={savingUpi || upiValue === currentUpi}
+                  className="px-6 py-4 bg-neu-bg text-neu-blue font-black rounded-2xl shadow-neu-flat hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all disabled:opacity-50 disabled:shadow-none whitespace-nowrap flex items-center gap-2"
+                >
+                  {savingUpi ? <RefreshCcw className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />} Save
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Quiz Reset Card */}
       <div className="bg-neu-bg p-8 rounded-[32px] shadow-neu-flat">
         <div className="flex items-start justify-between flex-col md:flex-row gap-6">
@@ -52,26 +103,40 @@ export default function SettingsClient({ quizId, stats }: { quizId: string | nul
               <Database className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-black text-neu-text">Reset Quiz Configuration</h2>
+              <h2 className="text-xl font-black text-neu-text">Reset Main Quiz Configuration</h2>
               <p className="text-neu-text-light font-bold mt-1 max-w-lg">
-                This will delete the current quiz, all of its questions, options, settings, and any submissions tied to it. Participants will not be deleted.
+                This will delete the main quiz, all of its questions, options, settings, and any submissions tied to it. Participants will not be deleted.
               </p>
-              <div className="mt-4 flex gap-4">
-                <span className="inline-flex items-center gap-1 text-xs font-bold bg-neu-bg shadow-neu-pressed-sm px-3 py-1.5 rounded-xl text-neu-text-light">
-                  Status: {stats.hasQuiz ? <span className="text-neu-green">Active Quiz</span> : <span className="text-neu-red">No Quiz Found</span>}
-                </span>
-                <span className="inline-flex items-center gap-1 text-xs font-bold bg-neu-bg shadow-neu-pressed-sm px-3 py-1.5 rounded-xl text-neu-text-light">
-                  {stats.questions} Questions
-                </span>
-              </div>
             </div>
           </div>
           <button
             onClick={() => setModalOpen("quiz")}
-            disabled={!stats.hasQuiz}
-            className="flex items-center gap-2 px-6 py-4 bg-neu-bg text-neu-red font-black rounded-2xl shadow-neu-flat hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all disabled:opacity-50 disabled:shadow-none w-full md:w-auto justify-center"
+            className="flex items-center gap-2 px-6 py-4 bg-neu-bg text-neu-red font-black rounded-2xl shadow-neu-flat hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all w-full md:w-auto justify-center"
           >
             <Trash2 className="w-5 h-5" /> Reset Quiz
+          </button>
+        </div>
+      </div>
+
+      {/* Mock Quiz Reset Card */}
+      <div className="bg-neu-bg p-8 rounded-[32px] shadow-neu-flat">
+        <div className="flex items-start justify-between flex-col md:flex-row gap-6">
+          <div className="flex gap-5">
+            <div className="w-14 h-14 rounded-2xl bg-neu-bg shadow-neu-pressed-sm flex items-center justify-center text-neu-blue shrink-0">
+              <BookOpen className="w-7 h-7" />
+            </div>
+            <div>
+              <h2 className="text-xl font-black text-neu-text">Reset Mock Quiz Configuration</h2>
+              <p className="text-neu-text-light font-bold mt-1 max-w-lg">
+                This will delete the mock quiz and all its submissions and questions. Great for cleaning up after a practice run.
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={() => setModalOpen("mock")}
+            className="flex items-center gap-2 px-6 py-4 bg-neu-bg text-neu-red font-black rounded-2xl shadow-neu-flat hover:shadow-neu-pressed-sm active:shadow-neu-pressed transition-all w-full md:w-auto justify-center"
+          >
+            <Trash2 className="w-5 h-5" /> Reset Mock
           </button>
         </div>
       </div>
@@ -150,6 +215,7 @@ export default function SettingsClient({ quizId, stats }: { quizId: string | nul
 
             <p className="text-neu-text-light font-bold mb-6">
               {modalOpen === "quiz" && "You are about to delete the active quiz, all its questions, and all linked submissions. This action cannot be undone."}
+              {modalOpen === "mock" && "You are about to delete the mock quiz, its questions, and any mock test results. This action cannot be undone."}
               {modalOpen === "participants" && "You are about to permanently delete all registered participants and their test scores. This action cannot be undone."}
               {modalOpen === "factory" && "You are about to completely wipe the entire system database. All configurations, questions, participants, and results will be lost forever."}
             </p>

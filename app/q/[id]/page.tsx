@@ -33,7 +33,7 @@ export default async function TakeQuizPage({
     .single()
 
   if (!participant) {
-    redirect('/login')
+    redirect('/api/logout')
   }
 
   // Check if already submitted

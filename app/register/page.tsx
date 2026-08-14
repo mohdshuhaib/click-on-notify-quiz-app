@@ -1,7 +1,7 @@
 'use client'
 
-import { useState, useRef } from 'react'
-import { registerParticipant } from './actions'
+import { useState, useRef, useEffect } from 'react'
+import { registerParticipant, getUpiId } from './actions'
 import { jsPDF } from 'jspdf'
 import html2canvas from 'html2canvas'
 import Link from 'next/link'
@@ -23,6 +23,11 @@ export default function RegisterPage() {
   const [sameAsPhone, setSameAsPhone] = useState(false)
   const [phoneVal, setPhoneVal] = useState('')
   const [whatsappVal, setWhatsappVal] = useState('')
+  const [upiId, setUpiId] = useState('give-your-upi-here@oksbi')
+
+  useEffect(() => {
+    getUpiId().then(setUpiId).catch(console.error)
+  }, [])
 
   const pdfRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
@@ -230,8 +235,7 @@ export default function RegisterPage() {
               <h3 className="font-bold text-neu-text">Payment Verification</h3>
               <p className="text-xs text-neu-text-light mt-1">Please complete the payment using GPay and enter the Transaction/Payment ID below.</p>
             </div>
-            
-            <a href="upi://pay?pa=akbarshuhaib55-2@okaxis&pn=Click%20on%20Notify%20Quiz&am=20.00&cu=INR" target="_blank" className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
+            <a href={`upi://pay?pa=${upiId}&pn=Click%20on%20Notify%20Quiz&am=20.00&cu=INR`} target="_blank" className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
               Open GPay to Pay ₹20
             </a>
 

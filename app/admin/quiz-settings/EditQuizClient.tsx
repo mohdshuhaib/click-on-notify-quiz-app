@@ -15,9 +15,10 @@ interface Props {
   quizId: string;
   initialQuizState: QuizState;
   initialQuestions: Question[];
+  isMock?: boolean;
 }
 
-export default function EditQuizClient({ quizId, initialQuizState, initialQuestions }: Props) {
+export default function EditQuizClient({ quizId, initialQuizState, initialQuestions, isMock = false }: Props) {
   const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
@@ -72,8 +73,10 @@ export default function EditQuizClient({ quizId, initialQuizState, initialQuesti
           <ArrowLeft className="w-6 h-6" />
         </Link>
         <div>
-          <h1 className="text-3xl font-bold text-neu-text">Quiz Settings</h1>
-          <p className="text-neu-text-light font-medium mt-1">Update your mega quiz configurations.</p>
+          <h1 className="text-3xl font-bold text-neu-text">{isMock ? "Mock Quiz Settings" : "Main Quiz Settings"}</h1>
+          <p className="text-neu-text-light font-medium mt-1">
+            {isMock ? "Setup practice test questions and rules." : "Update your main mega quiz configurations."}
+          </p>
         </div>
       </div>
 

@@ -37,13 +37,15 @@ export default async function QuizResultsPage() {
 
   // Map participant data so the ResultsClient works the same
   const mappedSubmissions = submissions?.map(sub => {
+    // Supabase TS might infer joined tables as arrays
+    const participant = Array.isArray(sub.participants) ? sub.participants[0] : sub.participants;
     return {
       ...sub,
-      respondent_name: sub.participants?.name || "Unknown",
+      respondent_name: participant?.name || "Unknown",
       respondent_details: {
-        reg_id: sub.participants?.reg_id,
-        place: sub.participants?.place,
-        district: sub.participants?.district
+        reg_id: participant?.reg_id,
+        place: participant?.place,
+        district: participant?.district
       }
     };
   }) || [];

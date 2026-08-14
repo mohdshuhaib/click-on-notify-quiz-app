@@ -1,18 +1,18 @@
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-import EditQuizClient from "./EditQuizClient";
+import EditQuizClient from "../quiz-settings/EditQuizClient";
 
-export default async function EditQuizPage() {
+export default async function EditMockQuizPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
 
-  // Fetch the one and only main quiz (or create if it doesn't exist)
+  // Fetch the one and only mock quiz (or create if it doesn't exist)
   let { data: quiz, error: quizError } = await supabase
     .from("quizzes")
     .select("*")
-    .eq('is_mock', false)
+    .eq('is_mock', true)
     .order('created_at', { ascending: true })
     .limit(1)
     .single();
@@ -21,11 +21,11 @@ export default async function EditQuizPage() {
     const { data: newQuiz, error } = await supabase
       .from('quizzes')
       .insert({
-        title: 'Click on Notify Mega Quiz',
-        description: 'Welcome to the Mega Quiz Competition',
+        title: 'Click on Notify Mock Test',
+        description: 'Practice test for the upcoming mega quiz.',
         time_limit_seconds: 1800, // Default 30 mins
         is_published: false,
-        is_mock: false
+        is_mock: true
       })
       .select('*')
       .single();
@@ -33,7 +33,7 @@ export default async function EditQuizPage() {
     quiz = newQuiz;
   }
 
-  if (!quiz) return <div>Error initializing quiz.</div>;
+  if (!quiz) return <div>Error initializing mock quiz.</div>;
 
   // Fetch Questions and Options in a single optimized nested query
   const { data: questions } = await supabase
@@ -89,6 +89,7 @@ export default async function EditQuizPage() {
       quizId={quiz.id}
       initialQuizState={formattedQuizState}
       initialQuestions={formattedQuestions}
+      isMock={true}
     />
   );
 }

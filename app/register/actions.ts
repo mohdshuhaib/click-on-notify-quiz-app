@@ -110,3 +110,25 @@ export async function registerParticipant(formData: FormData) {
 
   return { success: true, reg_id, access_code, data }
 }
+
+export async function getUpiId() {
+  const cookieStore = await cookies()
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll: () => cookieStore.getAll(),
+        setAll: () => {}
+      }
+    }
+  )
+
+  const { data } = await supabase
+    .from("app_settings")
+    .select("value")
+    .eq("key", "upi_id")
+    .single()
+
+  return data?.value || "give-your-upi-here@oksbi"
+}

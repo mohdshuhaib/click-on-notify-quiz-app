@@ -1,7 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import Link from 'next/link'
-import { Users, Settings, Trophy, LogOut, Activity, HardDrive } from 'lucide-react'
+import { Users, Settings, Trophy, LogOut, Activity, HardDrive, BookOpen } from 'lucide-react'
 import { adminLogout } from '../logout-action'
 
 export default async function AdminDashboard() {
@@ -81,8 +81,18 @@ export default async function AdminDashboard() {
             <Settings className="w-8 h-8" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-neu-text">Quiz Settings</h3>
-            <p className="text-sm text-neu-text-light mt-1">Manage questions & access</p>
+            <h3 className="text-xl font-bold text-neu-text">Main Quiz Settings</h3>
+            <p className="text-sm text-neu-text-light mt-1">Manage main questions & rules</p>
+          </div>
+        </Link>
+
+        <Link href="/admin/mock-quiz-settings" className="group bg-neu-bg rounded-3xl p-8 shadow-neu-flat flex flex-col items-center justify-center text-center space-y-4 hover:shadow-neu-pressed transition-all border-2 border-neu-blue/10">
+          <div className="w-16 h-16 rounded-full bg-neu-bg shadow-neu-flat group-hover:shadow-neu-pressed-sm flex items-center justify-center text-neu-blue transition-all">
+            <BookOpen className="w-8 h-8" />
+          </div>
+          <div>
+            <h3 className="text-xl font-bold text-neu-text">Mock Test Settings</h3>
+            <p className="text-sm text-neu-text-light mt-1">Create practice mock quiz</p>
           </div>
         </Link>
 

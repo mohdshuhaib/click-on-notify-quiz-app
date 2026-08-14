@@ -31,6 +31,17 @@ export default async function GeneralSettingsPage() {
     .from("questions")
     .select("*", { count: 'exact', head: true });
 
+  let upiId = "give-your-upi-here@oksbi";
+  const { data: upiData } = await supabase
+    .from("app_settings")
+    .select("value")
+    .eq("key", "upi_id")
+    .single();
+    
+  if (upiData) {
+    upiId = upiData.value;
+  }
+
   return (
     <div className="min-h-screen p-4 md:p-8 flex flex-col items-center">
       <div className="w-full max-w-5xl">
@@ -51,6 +62,7 @@ export default async function GeneralSettingsPage() {
 
         <SettingsClient 
           quizId={quiz?.id || null}
+          currentUpi={upiId}
           stats={{
             participants: participantsCount || 0,
             submissions: submissionsCount || 0,
