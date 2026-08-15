@@ -3,6 +3,9 @@ import { redirect } from 'next/navigation'
 
 export async function GET() {
   const cookieStore = await cookies()
-  cookieStore.delete('participant_token')
+  cookieStore.delete({
+    name: 'participant_token',
+    path: '/'
+  })
   redirect('/login')
 }

@@ -26,23 +26,24 @@ export default async function TakeQuizPage({
     { cookies: { getAll: () => cookieStore.getAll(), setAll: () => {} } }
   )
 
-  const { data: participant } = await supabase
+  const { data: participant, error: participantError } = await supabase
     .from('participants')
     .select('*')
     .eq('id', participantId)
     .single()
 
-  if (!participant) {
+  if (participantError || !participant) {
+    console.error("Error fetching participant in /q/[id]:", participantError, "ParticipantId:", participantId);
     redirect('/api/logout')
   }
 
   // Check if already submitted
-  const { data: submission } = await supabase
+  const { data: submission, error: submissionError } = await supabase
     .from('quiz_submissions')
     .select('id')
     .eq('quiz_id', quizId)
     .eq('participant_id', participant.id)
-    .single()
+    .maybeSingle()
 
   if (submission) {
     redirect('/dashboard')
