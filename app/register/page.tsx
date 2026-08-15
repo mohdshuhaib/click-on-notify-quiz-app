@@ -2,11 +2,9 @@
 
 import { useState, useRef, useEffect } from 'react'
 import { registerParticipant, getUpiId } from './actions'
-import { jsPDF } from 'jspdf'
-import html2canvas from 'html2canvas'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Loader2, Download, Copy, CheckCircle } from 'lucide-react'
+import { Loader2, Copy, CheckCircle } from 'lucide-react'
 
 const districts = [
   "Thiruvananthapuram", "Kollam", "Pathanamthitta", "Alappuzha", "Kottayam", 
@@ -30,6 +28,7 @@ export default function RegisterPage() {
   }, [])
 
   const pdfRef = useRef<HTMLDivElement>(null)
+  const errorRef = useRef<HTMLDivElement>(null)
   const [copied, setCopied] = useState(false)
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -57,31 +56,17 @@ export default function RegisterPage() {
         setSuccess(true)
       } else {
         setError(res.error || 'Registration failed')
+        setTimeout(() => {
+          errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        }, 100)
       }
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred')
+      setTimeout(() => {
+        errorRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }, 100)
     } finally {
       setLoading(false)
-    }
-  }
-
-  const [isDownloading, setIsDownloading] = useState(false)
-
-  const handleDownloadPDF = async () => {
-    if (!pdfRef.current || !result) return
-    setIsDownloading(true)
-    try {
-      const canvas = await html2canvas(pdfRef.current, { scale: 2 } as any)
-      const imgData = canvas.toDataURL('image/png')
-      const pdf = new jsPDF('p', 'mm', 'a4')
-      const pdfWidth = pdf.internal.pageSize.getWidth()
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight)
-      pdf.save(`Registration_${result.reg_id}.pdf`)
-    } catch (error) {
-      console.error('Error generating PDF:', error)
-    } finally {
-      setIsDownloading(false)
     }
   }
 
@@ -138,21 +123,20 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
+          <div className="flex flex-col gap-4">
             <button 
               onClick={handleCopy}
-              className="flex-1 py-4 px-6 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-text font-bold flex items-center justify-center gap-2 transition-all active:shadow-neu-pressed"
+              className="w-full py-4 px-6 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-text font-bold flex items-center justify-center gap-2 transition-all active:shadow-neu-pressed"
             >
               {copied ? <CheckCircle className="w-5 h-5 text-neu-green" /> : <Copy className="w-5 h-5" />}
               {copied ? 'Copied!' : 'Copy Credentials'}
             </button>
-            <button 
-              onClick={handleDownloadPDF}
-              disabled={isDownloading}
-              className="flex-1 py-4 px-6 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold flex items-center justify-center gap-2 transition-all active:shadow-neu-pressed disabled:opacity-50 disabled:shadow-neu-flat"
-            >
-              <Download className="w-5 h-5" /> {isDownloading ? 'Downloading...' : 'Download PDF'}
-            </button>
+            
+            <div className="bg-neu-bg p-4 rounded-xl shadow-neu-pressed-sm border border-neu-blue/20 text-center">
+              <p className="text-sm font-semibold text-neu-blue">
+                Important: Please copy and securely save your Registration ID and Access Code for all future quiz activities.
+              </p>
+            </div>
           </div>
 
           <div className="mt-8 text-center">
@@ -172,12 +156,6 @@ export default function RegisterPage() {
           <h1 className="text-3xl font-bold text-neu-text">Participant Registration</h1>
           <p className="text-neu-text-light">Fill in your details to get your Registration ID.</p>
         </div>
-
-        {error && (
-          <div className="mb-6 p-4 rounded-xl bg-neu-bg shadow-neu-pressed-sm border border-neu-red/20 text-neu-red text-center font-medium">
-            {error}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -244,6 +222,12 @@ export default function RegisterPage() {
               <input required name="payment_id" type="text" className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="e.g. T20210202123456789" />
             </div>
           </div>
+
+          {error && (
+            <div ref={errorRef} className="p-4 rounded-xl bg-neu-bg shadow-neu-pressed-sm border border-neu-red/20 text-neu-red text-center font-bold text-sm animate-pulse">
+              {error}
+            </div>
+          )}
 
           <div className="pt-4 flex flex-col sm:flex-row items-center gap-4">
             <Link href="/" className="w-full sm:w-auto py-4 px-8 rounded-2xl bg-neu-bg shadow-neu-flat text-neu-text font-bold text-center active:shadow-neu-pressed">
