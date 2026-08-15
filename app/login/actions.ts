@@ -50,7 +50,6 @@ export async function loginParticipant(formData: FormData) {
   // Actually, better to encode it. We'll just store the UUID so we can read it in middleware/dashboard.
   cookieStore.set('participant_token', participant.id, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
     maxAge: 60 * 60 * 24 * 7 // 1 week
