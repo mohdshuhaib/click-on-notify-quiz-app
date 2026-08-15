@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 // Import the signout Server Action
-import { signout } from "@/app/auth/actions";
+import { adminLogout } from "@/app/admin/logout-action";
 
 export default function Sidebar({ userEmail, userName }: { userEmail: string, userName: string }) {
   const pathname = usePathname();
@@ -111,7 +111,7 @@ export default function Sidebar({ userEmail, userName }: { userEmail: string, us
               <div className="h-px bg-slate-100 my-1 mx-2"></div>
 
               {/* Native Next.js Server Action Form for Logout */}
-              <form action={signout}>
+              <form action={adminLogout}>
                 <button
                   type="submit"
                   className="flex items-center gap-3 w-full px-3 py-2 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-all text-left"
@@ -239,7 +239,7 @@ export default function Sidebar({ userEmail, userName }: { userEmail: string, us
               <div className="h-px bg-slate-100 my-1 mx-2"></div>
 
               {/* Native Next.js Server Action Form for Logout */}
-              <form action={signout}>
+              <form action={adminLogout}>
                 <button
                   type="submit"
                   className="flex items-center gap-3 w-full px-3 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 rounded-xl transition-all text-left"
