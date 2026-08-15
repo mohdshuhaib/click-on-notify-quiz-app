@@ -183,7 +183,7 @@ export default function RegisterPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-neu-text ml-2">Full Name</label>
-              <input required name="name" type="text" className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="John Doe" />
+              <input required name="name" type="text" className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="Shuhaib M" />
             </div>
             
             <div className="space-y-2">
@@ -209,13 +209,13 @@ export default function RegisterPage() {
 
           <div className="space-y-2">
             <label className="text-sm font-semibold text-neu-text ml-2">Email Address</label>
-            <input required name="email" type="email" className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="john@example.com" />
+            <input required name="email" type="email" className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="shuhaib@example.com" />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-sm font-semibold text-neu-text ml-2">Phone Number</label>
-              <input required name="phone" type="tel" value={phoneVal} onChange={handlePhoneChange} className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="+91 9876543210" />
+              <input required name="phone" type="tel" value={phoneVal} onChange={handlePhoneChange} className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="+91 9645184118" />
             </div>
             
             <div className="space-y-2">
@@ -226,7 +226,7 @@ export default function RegisterPage() {
                   Same as Phone
                 </label>
               </div>
-              <input required name="whatsapp" type="tel" value={whatsappVal} onChange={(e) => { setWhatsappVal(e.target.value); setSameAsPhone(false) }} className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="+91 9876543210" />
+              <input required name="whatsapp" type="tel" value={whatsappVal} onChange={(e) => { setWhatsappVal(e.target.value); setSameAsPhone(false) }} className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text placeholder:text-neu-text-light/50 focus:outline-none focus:ring-2 focus:ring-neu-blue/50" placeholder="+91 9645184118" />
             </div>
           </div>
 
