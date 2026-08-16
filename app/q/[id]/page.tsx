@@ -32,8 +32,11 @@ export default async function TakeQuizPage({
     .eq('id', participantId)
     .single()
 
-  if (participantError || !participant) {
-    console.error("Error fetching participant in /q/[id]:", participantError, "ParticipantId:", participantId);
+  if (participantError && participantError.code === 'PGRST116') {
+    redirect('/api/logout')
+  } else if (participantError) {
+    throw new Error('Database connection error while fetching participant. Please refresh.')
+  } else if (!participant) {
     redirect('/api/logout')
   }
 

@@ -27,13 +27,19 @@ export default async function ParticipantDashboard() {
   )
 
   // Get participant details
-  const { data: participant } = await supabase
+  const { data: participant, error: participantError } = await supabase
     .from('participants')
     .select('*')
     .eq('id', participantId)
     .single()
 
-  if (!participant) {
+  if (participantError && participantError.code === 'PGRST116') {
+    // Participant deleted from database, clear cookie
+    redirect('/api/logout')
+  } else if (participantError) {
+    // Transient error or other DB issue, don't log them out!
+    throw new Error('Database connection error while fetching participant. Please refresh.')
+  } else if (!participant) {
     redirect('/api/logout')
   }
 

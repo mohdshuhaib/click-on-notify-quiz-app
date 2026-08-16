@@ -29,5 +29,17 @@
     "postcss": "^8.5.8",
     "tailwindcss": "^3.4.19",
     "typescript": "^5"
-  }
+  },
+  "browserslist": [
+    "> 0.5%",
+    "last 4 versions",
+    "Firefox ESR",
+    "not dead",
+    "ie >= 11",
+    "safari >= 9",
+    "ios >= 9",
+    "chrome >= 49",
+    "android >= 4.4",
+    "op_mob >= 46"
+  ]
 }
