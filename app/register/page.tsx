@@ -213,9 +213,28 @@ export default function RegisterPage() {
               <h3 className="font-bold text-neu-text">Payment Verification</h3>
               <p className="text-xs text-neu-text-light mt-1">Please complete the payment using GPay and enter the Transaction/Payment ID below.</p>
             </div>
-            <a href={`upi://pay?pa=${encodeURIComponent(upiId || '')}&cu=INR`} className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
-              Open GPay to Pay ₹20
-            </a>
+            <div className="flex flex-col items-center gap-3">
+              <div className="w-full flex items-center justify-between p-4 rounded-xl bg-neu-bg shadow-neu-pressed-sm border border-slate-300/30">
+                <span className="font-mono text-neu-blue font-bold tracking-wide">{upiId || 'Loading...'}</span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (upiId) {
+                      navigator.clipboard.writeText(upiId)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
+                    }
+                  }}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-neu-bg shadow-neu-flat text-neu-text hover:shadow-neu-pressed transition-all text-xs font-bold"
+                >
+                  {copied ? <CheckCircle className="w-4 h-4 text-neu-green" /> : <Copy className="w-4 h-4 text-neu-blue" />}
+                  {copied ? 'Copied!' : 'Copy'}
+                </button>
+              </div>
+              <p className="text-xs font-bold text-neu-red text-center">
+                Copy the number above and pay exactly ₹20 via Google Pay, PhonePe, or Paytm.
+              </p>
+            </div>
 
             <div className="space-y-2 pt-2">
               <label className="text-sm font-semibold text-neu-text ml-2">Payment ID (Required)</label>

@@ -72,14 +72,14 @@ export default function SettingsClient({ quizId, currentUpi, stats }: { quizId: 
             <div className="w-full">
               <h2 className="text-xl font-black text-neu-text">Payment Configuration</h2>
               <p className="text-neu-text-light font-bold mt-1 max-w-lg">
-                Set the UPI ID that participants will pay to during registration.
+                Set the Phone Number or UPI ID that participants will pay to during registration.
               </p>
               <div className="mt-4 flex flex-col sm:flex-row gap-4 items-center w-full max-w-md">
                 <input 
                   type="text" 
                   value={upiValue}
                   onChange={(e) => setUpiValue(e.target.value)}
-                  placeholder="e.g. your-name@oksbi"
+                  placeholder="e.g. 9876543210 or your-name@oksbi"
                   className="w-full p-4 rounded-2xl bg-neu-bg shadow-neu-pressed-sm text-neu-text focus:outline-none focus:ring-2 focus:ring-neu-blue/50"
                 />
                 <button
