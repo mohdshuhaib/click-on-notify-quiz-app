@@ -27,16 +27,18 @@ export async function updateSession(request: NextRequest) {
     }
   )
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
   const path = request.nextUrl.pathname
-
-  // --- ADMIN ROUTE PROTECTION LOGIC (Supabase Auth) ---
   const isAdminRoute = path.startsWith('/admin')
   const isAdminLogin = path === '/admin/login'
 
+  let user = null
+
+  if (isAdminRoute) {
+    const { data } = await supabase.auth.getUser()
+    user = data.user
+  }
+
+  // --- ADMIN ROUTE PROTECTION LOGIC (Supabase Auth) ---
   if (isAdminRoute && !isAdminLogin && !user) {
     const url = request.nextUrl.clone()
     url.pathname = '/admin/login'
