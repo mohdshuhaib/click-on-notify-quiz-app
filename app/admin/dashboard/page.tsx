@@ -24,9 +24,23 @@ export default async function AdminDashboard() {
     .from('participants')
     .select('*', { count: 'exact', head: true })
 
-  const { count: submissionsCount } = await supabase
-    .from('quiz_submissions')
-    .select('*', { count: 'exact', head: true })
+  // Fetch the main active/published quiz
+  const { data: mainQuiz } = await supabase
+    .from('quizzes')
+    .select('id')
+    .eq('is_mock', false)
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  let submissionsCount = 0;
+  if (mainQuiz) {
+    const { count } = await supabase
+      .from('quiz_submissions')
+      .select('*', { count: 'exact', head: true })
+      .eq('quiz_id', mainQuiz.id)
+    submissionsCount = count || 0;
+  }
 
   return (
     <div className="min-h-screen p-4 md:p-8 flex flex-col items-center">

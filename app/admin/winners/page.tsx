@@ -10,13 +10,14 @@ export default async function QuizResultsPage() {
 
   if (!user) redirect("/login");
 
-  // 1. Fetch the single Quiz Details
+  // 1. Fetch the single Quiz Details (Main Quiz Only)
   const { data: quiz, error: quizError } = await supabase
     .from("quizzes")
     .select("*")
-    .order('created_at', { ascending: true })
+    .eq('is_mock', false)
+    .order('created_at', { ascending: false })
     .limit(1)
-    .single();
+    .maybeSingle();
 
   if (quizError || !quiz) {
     return (
