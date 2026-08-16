@@ -1,5 +1,6 @@
 import { createClient } from '@/utils/supabase/server'
 import { NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
 
 export async function POST(request: Request) {
   try {
@@ -23,12 +24,23 @@ export async function POST(request: Request) {
     }
 
     const response = NextResponse.json({ success: true })
-    response.cookies.set('participant_token', participant.id, {
+    
+    // Set via next/headers as primary method for Next.js 15
+    const cookieStore = await cookies()
+    cookieStore.set('participant_token', participant.id, {
       httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
       path: '/',
       maxAge: 60 * 60 * 24 * 7 // 1 week
     })
+
+    // Set via raw HTTP headers as a fallback guarantee for Vercel Edge Cache
+    const secureFlag = process.env.NODE_ENV === 'production' ? 'Secure;' : ''
+    response.headers.append(
+      'Set-Cookie',
+      `participant_token=${participant.id}; Path=/; HttpOnly; SameSite=Lax; ${secureFlag} Max-Age=${60 * 60 * 24 * 7}`
+    )
 
     return response
   } catch (error) {

@@ -30,8 +30,7 @@ export default function LoginPage() {
         return
       }
 
-      router.replace('/dashboard')
-      router.refresh()
+      window.location.href = '/dashboard'
     } catch (err: any) {
       setError('An unexpected error occurred')
       setLoading(false)

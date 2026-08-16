@@ -96,10 +96,10 @@ export default async function ParticipantDashboard() {
       <nav className="w-full max-w-4xl flex justify-between items-center mb-8 bg-neu-bg p-4 rounded-2xl shadow-neu-flat">
         <h1 className="text-xl font-bold text-neu-text tracking-tight">Click on Notify</h1>
         
-        {/* Logout via a Client Component or a simple form post, but for now we just link to a logout route or clear cookie client side */}
-        <Link href="/api/logout" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neu-bg shadow-neu-flat text-neu-red font-semibold hover:shadow-neu-pressed transition-all text-sm">
+        {/* Logout via a standard anchor tag to prevent Next.js from prefetching the route and accidentally logging the user out in the background */}
+        <a href="/api/logout" className="flex items-center gap-2 px-4 py-2 rounded-xl bg-neu-bg shadow-neu-flat text-neu-red font-semibold hover:shadow-neu-pressed transition-all text-sm">
           <LogOut className="w-4 h-4" /> Logout
-        </Link>
+        </a>
       </nav>
 
       <div className="w-full max-w-4xl grid grid-cols-1 md:grid-cols-3 gap-8">
