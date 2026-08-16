@@ -33,11 +33,11 @@ export default async function TakeQuizPage({
     .single()
 
   if (participantError && participantError.code === 'PGRST116') {
-    redirect('/api/logout')
+    throw new Error('PARTICIPANT_NOT_FOUND: The participant row was not found in the database. ID: ' + participantId)
   } else if (participantError) {
-    throw new Error('Database connection error while fetching participant. Please refresh.')
+    throw new Error('DATABASE_ERROR: ' + participantError.message)
   } else if (!participant) {
-    redirect('/api/logout')
+    throw new Error('PARTICIPANT_NULL: The participant was null but no error was thrown.')
   }
 
   // Check if already submitted

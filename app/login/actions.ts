@@ -55,5 +55,5 @@ export async function loginParticipant(formData: FormData) {
     maxAge: 60 * 60 * 24 * 7 // 1 week
   })
 
-  redirect('/dashboard')
+  return { success: true }
 }

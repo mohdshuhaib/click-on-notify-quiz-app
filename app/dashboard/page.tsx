@@ -34,13 +34,11 @@ export default async function ParticipantDashboard() {
     .single()
 
   if (participantError && participantError.code === 'PGRST116') {
-    // Participant deleted from database, clear cookie
-    redirect('/api/logout')
+    throw new Error('PARTICIPANT_NOT_FOUND: The participant row was not found in the database. ID: ' + participantId)
   } else if (participantError) {
-    // Transient error or other DB issue, don't log them out!
-    throw new Error('Database connection error while fetching participant. Please refresh.')
+    throw new Error('DATABASE_ERROR: ' + participantError.message)
   } else if (!participant) {
-    redirect('/api/logout')
+    throw new Error('PARTICIPANT_NULL: The participant was null but no error was thrown.')
   }
 
   // Get the main active/published quiz

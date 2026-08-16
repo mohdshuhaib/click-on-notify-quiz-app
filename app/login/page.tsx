@@ -3,9 +3,11 @@
 import { useState } from 'react'
 import { loginParticipant } from './actions'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Loader2, KeyRound } from 'lucide-react'
 
 export default function LoginPage() {
+  const router = useRouter()
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -20,8 +22,10 @@ export default function LoginPage() {
       if (res && !res.success) {
         setError(res.error || 'Login failed')
         setLoading(false)
+      } else if (res && res.success) {
+        // Client-side redirect guarantees the browser has processed the Set-Cookie header
+        router.push('/dashboard')
       }
-      // If success, next/navigation redirect will trigger and we don't need to unset loading immediately
     } catch (err: any) {
       if (err.message === 'NEXT_REDIRECT') {
         throw err;
