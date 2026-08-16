@@ -2,6 +2,7 @@
 
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
+import { unstable_noStore as noStore } from 'next/cache'
 import crypto from 'crypto'
 
 function generateRegId() {
@@ -112,10 +113,11 @@ export async function registerParticipant(formData: FormData) {
 }
 
 export async function getUpiId() {
+  noStore()
   const cookieStore = await cookies()
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
         getAll: () => cookieStore.getAll(),
@@ -124,11 +126,15 @@ export async function getUpiId() {
     }
   )
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("app_settings")
     .select("value")
     .eq("key", "upi_id")
     .single()
+
+  if (error) {
+    console.error("Error fetching UPI ID:", error)
+  }
 
   return data?.value || "give-your-upi-here@oksbi"
 }
