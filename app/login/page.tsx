@@ -1,7 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-import { loginParticipant } from './actions'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Loader2, KeyRound } from 'lucide-react'
@@ -18,19 +17,23 @@ export default function LoginPage() {
     
     const formData = new FormData(e.currentTarget)
     try {
-      const res = await loginParticipant(formData)
-      if (res && !res.success) {
-        setError(res.error || 'Login failed')
+      const res = await fetch("/api/auth/participant/login", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify(Object.fromEntries(formData))
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        setError(data.error || 'Invalid Registration ID or Access Code')
         setLoading(false)
-      } else if (res && res.success) {
-        // Client-side redirect guarantees the browser has processed the Set-Cookie header
-        router.push('/dashboard')
+        return
       }
+
+      router.replace('/dashboard')
+      router.refresh()
     } catch (err: any) {
-      if (err.message === 'NEXT_REDIRECT') {
-        throw err;
-      }
-      setError(err.message || 'An unexpected error occurred')
+      setError('An unexpected error occurred')
       setLoading(false)
     }
   }
