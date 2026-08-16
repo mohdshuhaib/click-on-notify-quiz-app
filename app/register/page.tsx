@@ -213,7 +213,7 @@ export default function RegisterPage() {
               <h3 className="font-bold text-neu-text">Payment Verification</h3>
               <p className="text-xs text-neu-text-light mt-1">Please complete the payment using GPay and enter the Transaction/Payment ID below.</p>
             </div>
-            <a href={`upi://pay?pa=${encodeURIComponent(upiId || '')}&am=20&cu=INR`} className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
+            <a href={`upi://pay?pa=${encodeURIComponent(upiId || '')}&cu=INR`} className="block w-full py-3 rounded-xl bg-neu-bg shadow-neu-flat text-neu-blue font-bold text-center active:shadow-neu-pressed-sm text-sm">
               Open GPay to Pay ₹20
             </a>
 
